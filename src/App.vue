@@ -38,14 +38,12 @@ export default {
       axios.get(`${this.apiFilmsUrl}${search}`)
       .then((result) => {
         this.filmsList = result.data.results;
-        console.log(result.data.results);
         }
       );
 
       axios.get(`${this.apiTVSeriesUrl}${search}`)
       .then((result) => {
         this.TVSeriesList = result.data.results;
-        console.log(result.data.results);
         }
       );
     }

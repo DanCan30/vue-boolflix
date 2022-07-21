@@ -11,7 +11,11 @@
         <ul>
             <li>Titolo Originale: {{ item.original_title ? item.original_title : item.original_name }} </li>
             <li>Lingua Originale: <img class="language-flag" :src="flagUrl" :alt="item.original_language"></li>
-            <li>Voto: {{ getRatingOutOfFive(item.vote_average) }} </li>
+            <li>
+                Voto: 
+                <i class="fa-solid fa-star active-star" v-for="(number, activeStars) in getRatingOutOfFive(item.vote_average)" :key="activeStars"></i>
+                <i class="fa-solid fa-star" v-for="(number, negativeStars) in 5 - getRatingOutOfFive(item.vote_average)" :key="negativeStars"></i>
+            </li>
         </ul>
 
     </div>
@@ -86,7 +90,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
     img.language-flag {
         width: 32px;
     }
+
+    .active-star {
+        color: yellow;
+    }
+
 </style>

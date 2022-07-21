@@ -19,7 +19,6 @@ export default {
     methods: {
         emitSearchResult: function() {
             const result = this.$emit('search', this.searchInput);
-            // this.searchInput = "";
             return result;
         }
     }
