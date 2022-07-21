@@ -1,23 +1,31 @@
 <template>
   <div>
-    <div v-if="item.title ? (!item.title.toLowerCase().includes('undefined')) : (!item.name.toLowerCase().includes('undefined')) ">
+    <div class="card" v-if="item.title ? (!item.title.toLowerCase().includes('undefined')) : (!item.name.toLowerCase().includes('undefined')) ">
 
-        <img :src="(item.poster_path == null ) ? require('../assets/img/Poster-not-found.jpg') : `https://image.tmdb.org/t/p/w342${item.poster_path}` " :alt="`${ item.title ? item.title : item.name }'s poster`">
+        <div class="card-flipper">
 
+            <div class="card-front">
+                <img class="poster" :src="(item.poster_path == null ) ? require('../assets/img/Poster-not-found.jpg') : `https://image.tmdb.org/t/p/w342${item.poster_path}` " :alt="`${ item.title ? item.title : item.name }'s poster`">
+            </div>
 
-        <h2>
-            {{ item.title ? item.title : item.name }}
-        </h2>
-        <ul>
-            <li>Titolo Originale: {{ item.original_title ? item.original_title : item.original_name }} </li>
-            <li>Lingua Originale: <img class="language-flag" :src="flagUrl" :alt="item.original_language"></li>
-            <li>
-                Voto: 
-                <i class="fa-solid fa-star active-star" v-for="(number, activeStars) in getRatingOutOfFive(item.vote_average)" :key="activeStars"></i>
-                <i class="fa-solid fa-star" v-for="(number, negativeStars) in 5 - getRatingOutOfFive(item.vote_average)" :key="negativeStars"></i>
-            </li>
-        </ul>
+            <div class="card-back">
 
+                <h2>
+                    {{ item.title ? item.title : item.name }}
+                </h2>
+                <ul>
+                    <li>Titolo Originale: {{ item.original_title ? item.original_title : item.original_name }} </li>
+                    <li>Lingua Originale: <img class="language-flag" :src="flagUrl" :alt="item.original_language"></li>
+                    <li>
+                        Voto: 
+                        <i class="fa-solid fa-star active-star" v-for="(number, activeStars) in getRatingOutOfFive(item.vote_average)" :key="activeStars"></i>
+                        <i class="fa-solid fa-star" v-for="(number, negativeStars) in 5 - getRatingOutOfFive(item.vote_average)" :key="negativeStars"></i>
+                    </li>
+                </ul>
+
+            </div>
+
+        </div>
     </div>
         
   </div>
@@ -91,12 +99,77 @@ export default {
 
 <style lang="scss" scoped>
 
-    img.language-flag {
-        width: 32px;
+    div.card {
+
+        
+        width: 20rem;
+        height: 30rem;
+        margin: 0 1rem;
+        cursor: pointer;
+        perspective: 1000px;
+        text-transform: uppercase;
+
+        .card-flipper {
+            transform-style: preserve-3d;
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transition: transform .3s;
+        }
+
+        .card-front {
+
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+
+            img.poster {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+
+            }
+        }
+
+        .card-back {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 1rem;
+            backface-visibility: hidden;
+            transform: rotateY(180deg);
+
+            ul {
+                list-style: none;
+            }
+
+        }
+
+
+        img.language-flag {
+            width: 32px;
+        }
+
+        .active-star {
+            color: yellow;
+        }
+
+        &:hover .card-flipper {
+            transform: rotateY(180deg);
+        }
+
     }
 
-    .active-star {
-        color: yellow;
-    }
 
 </style>

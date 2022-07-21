@@ -1,13 +1,13 @@
 <template>
     <main>
-        <div>
-            <h2>film</h2>
+        <h2>film</h2>
+        <div class="cards-container">
             <CardElement v-for="film in films" :key="film.id"
             :item="film" />
         </div>
 
-        <div>
-            <h2>serie tv</h2>
+        <h2>serie tv</h2>
+        <div class="cards-container">
             <CardElement v-for="show in TVSeries" :key="show.id"
             :item="show" />
         </div>
@@ -37,6 +37,13 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
+    
+    div.cards-container {
+        margin: 2rem;
+        overflow-x: auto;
+        overflow-y: hidden;
+        display: flex;
+    }
 
 </style>

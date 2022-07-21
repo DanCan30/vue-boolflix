@@ -57,5 +57,10 @@ export default {
 
 <style lang="scss">
 @import "~@fortawesome/fontawesome-free/css/all.css";
+@import "./assets/styles/common.scss";
+
+  div#app {
+    font-family: 'Poppins', sans-serif;
+  }
 
 </style>
