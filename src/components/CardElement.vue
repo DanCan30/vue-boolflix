@@ -1,15 +1,30 @@
 <template>
   <div>
-    <h2>
-        {{ (film.title.toLowerCase().includes("undefined")) ? "" : film.title }}
-    </h2>
 
-    <ul v-if="!film.title.toLowerCase().includes('undefined')">
-        <li>Titolo: {{ film.title }}</li>
-        <li>Titolo Originale: {{ film.original_title }} </li>
-        <li>Lingua Originale: <img :src="flagUrl" :alt="film.original_language"></li>
-        <li>Voto: {{ film.vote_average }} </li>
-    </ul>
+
+    <!-- <div>
+        <h2 v-if="!film.title.toLowerCase().includes('undefined')">
+            {{ film.title }}
+        </h2>
+        <ul v-if="!film.title.toLowerCase().includes('undefined')">
+            <li>Titolo Originale: {{ film.original_title }} </li>
+            <li>Lingua Originale: <img :src="flagUrl" :alt="film.original_language"></li>
+            <li>Voto: {{ film.vote_average}} </li>
+        </ul>
+    </div> -->
+
+
+    <div>
+        <h2 v-if="!show.name.toLowerCase().includes('undefined')">
+            {{ show.name }}
+        </h2>
+        <ul v-if="!show.name.toLowerCase().includes('undefined')">
+            <li>Titolo Originale: {{ show.original_name }} </li>
+            <li>Lingua Originale: <img :src="flagUrl" :alt="show.original_language"></li>
+            <li>Voto: {{ show.vote_average}} </li>
+        </ul>
+    </div>
+    
   </div>
 </template>
 
@@ -28,14 +43,17 @@ export default {
 
     props: {
         film: {
-            required: true,
+            type: Object,
+        },
+
+        show: {
             type: Object,
         }
     },
 
     methods: {
         getLanguageFlag: function() {
-            axios.get(`${this.flagAPIUrl}${this.film.original_language}`)
+            axios.get(`${this.flagAPIUrl}${this.show.original_language}`)
             .then((result) => {
 
                     this.flagUrl = result.request.responseURL;
@@ -57,6 +75,10 @@ export default {
             )
 
         },
+
+        typeDetector: function() {
+
+        }
     },
 
     created() {

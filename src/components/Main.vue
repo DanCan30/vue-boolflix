@@ -1,7 +1,9 @@
 <template>
     <main>
-        <CardElement v-for="film in films" :key="film.id"
-        :film="film" />
+        <!-- <CardElement v-for="film in films" :key="film.id"
+        :film="film" /> -->
+        <CardElement v-for="show in TVSeries" :key="show.id"
+        :show="show" />
     </main>
 </template>
 
@@ -17,7 +19,10 @@ export default {
 
     props: {
         films: {
-            required: true,
+            type: Array,
+        },
+
+        TVSeries: {
             type: Array,
         }
     }

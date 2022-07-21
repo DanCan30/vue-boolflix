@@ -1,9 +1,10 @@
 <template>
   <div id="app">
 
-    <Header @search="getFilmsList" />
+    <Header @search="getShowsList" />
     <Main 
-      :films="filmsList"/>
+      :films="filmsList"
+      :TVSeries="TVSeriesList"/>
 
   </div>
 </template>
@@ -18,8 +19,10 @@ export default {
 
   data: function() {
     return {
-      apiUrl: "https://api.themoviedb.org/3/search/movie?api_key=1003857666890380902d6e3595e8622a&language=it-IT&query=",
+      apiFilmsUrl: "https://api.themoviedb.org/3/search/movie?api_key=1003857666890380902d6e3595e8622a&language=it-IT&query=",
+      apiTVSeriesUrl: "https://api.themoviedb.org/3/search/tv?api_key=1003857666890380902d6e3595e8622a&language=it-IT&query=",
       filmsList: [],
+      TVSeriesList: [],
     }
   },
 
@@ -28,18 +31,27 @@ export default {
     Main,
   },
   methods: {
-    getFilmsList: function(search) {
-      axios.get(`${this.apiUrl}${search}`)
+
+    getShowsList: function(search) {
+
+      axios.get(`${this.apiFilmsUrl}${search}`)
       .then((result) => {
         this.filmsList = result.data.results;
         console.log(result.data.results);
-      }
-);
+        }
+      );
+
+      axios.get(`${this.apiTVSeriesUrl}${search}`)
+      .then((result) => {
+        this.TVSeriesList = result.data.results;
+        console.log(result.data.results);
+        }
+      );
     }
   },
 
   created() {
-    this.getFilmsList();
+    this.getShowsList();
   }
 }
 </script>
