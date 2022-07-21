@@ -1,12 +1,16 @@
 <template>
   <div>
     <div v-if="item.title ? (!item.title.toLowerCase().includes('undefined')) : (!item.name.toLowerCase().includes('undefined')) ">
+
+        <img :src="(item.poster_path == null ) ? require('../assets/img/Poster-not-found.jpg') : `https://image.tmdb.org/t/p/w342${item.poster_path}` " :alt="`${ item.title ? item.title : item.name }'s poster`">
+
+
         <h2>
             {{ item.title ? item.title : item.name }}
         </h2>
         <ul>
             <li>Titolo Originale: {{ item.original_title ? item.original_title : item.original_name }} </li>
-            <li>Lingua Originale: <img :src="flagUrl" :alt="item.original_language"></li>
+            <li>Lingua Originale: <img class="language-flag" :src="flagUrl" :alt="item.original_language"></li>
             <li>Voto: {{ item.vote_average ? item.vote_average : item.vote_average }} </li>
         </ul>
 
@@ -52,6 +56,9 @@ export default {
                     case 'https://countryflagsapi.com/png/ja':
                         this.flagUrl = 'https://countryflagsapi.com/png/jp';
                         break;
+                    case 'https://countryflagsapi.com/png/el':
+                        this.flagUrl = 'https://countryflagsapi.com/png/sv';
+                        break;
                     default:
                         this.flagUrl = result.request.responseURL;
                     }
@@ -72,7 +79,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    img {
+    img.language-flag {
         width: 32px;
     }
 </style>
