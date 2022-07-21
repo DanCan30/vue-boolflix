@@ -11,7 +11,7 @@
         <ul>
             <li>Titolo Originale: {{ item.original_title ? item.original_title : item.original_name }} </li>
             <li>Lingua Originale: <img class="language-flag" :src="flagUrl" :alt="item.original_language"></li>
-            <li>Voto: {{ item.vote_average ? item.vote_average : item.vote_average }} </li>
+            <li>Voto: {{ getRatingOutOfFive(item.vote_average) }} </li>
         </ul>
 
     </div>
@@ -69,6 +69,13 @@ export default {
 
         lowerCaseElement: function(element) {
             return element.toLowerCase();
+        },
+
+        getRatingOutOfFive: function(value) {
+
+            let rating = Math.ceil(value / 2);
+            return rating;
+
         }
     },
 
