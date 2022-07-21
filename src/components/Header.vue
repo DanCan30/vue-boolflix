@@ -5,7 +5,7 @@
         <h1>netflix</h1>
 
         <div class="search">
-            <input type="text" v-model.trim="searchInput" @keyup.enter="emitSearchResult()">
+            <input type="text" v-model.trim="searchInput" @keyup="emitSearchResult()">
             <i class="fa-solid fa-magnifying-glass" @click="emitSearchResult()"></i>
         </div>
     </header>
