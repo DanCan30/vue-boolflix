@@ -2,6 +2,8 @@
   <div id="app">
 
     <Header @search="getFilmsList" />
+    <Main 
+      :films="filmsList"/>
 
   </div>
 </template>
@@ -16,7 +18,8 @@ export default {
 
   data: function() {
     return {
-      apiUrl: "https://api.themoviedb.org/3/search/movie?api_key=1003857666890380902d6e3595e8622a&query="
+      apiUrl: "https://api.themoviedb.org/3/search/movie?api_key=1003857666890380902d6e3595e8622a&language=it-IT&query=",
+      filmsList: [],
     }
   },
 
@@ -27,8 +30,11 @@ export default {
   methods: {
     getFilmsList: function(search) {
       axios.get(`${this.apiUrl}${search}`)
-      .then((result) => 
-      console.log(result.data.results));
+      .then((result) => {
+        this.filmsList = result.data.results;
+        console.log(result.data.results);
+      }
+);
     }
   },
 
