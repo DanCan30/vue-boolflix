@@ -3,6 +3,7 @@
 
     <Header @search="getShowsList" />
     <Main 
+    
       :films="filmsList"
       :TVSeries="TVSeriesList"/>
 

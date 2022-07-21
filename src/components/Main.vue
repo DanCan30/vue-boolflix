@@ -1,9 +1,16 @@
 <template>
     <main>
-        <!-- <CardElement v-for="film in films" :key="film.id"
-        :film="film" /> -->
-        <CardElement v-for="show in TVSeries" :key="show.id"
-        :show="show" />
+        <div>
+            <h2>film</h2>
+            <CardElement v-for="film in films" :key="film.id"
+            :item="film" />
+        </div>
+
+        <div>
+            <h2>serie tv</h2>
+            <CardElement v-for="show in TVSeries" :key="show.id"
+            :item="show" />
+        </div>
     </main>
 </template>
 

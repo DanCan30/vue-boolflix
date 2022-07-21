@@ -1,30 +1,17 @@
 <template>
   <div>
-
-
-    <!-- <div>
-        <h2 v-if="!film.title.toLowerCase().includes('undefined')">
-            {{ film.title }}
+    <div v-if="item.title ? (!item.title.toLowerCase().includes('undefined')) : (!item.name.toLowerCase().includes('undefined')) ">
+        <h2>
+            {{ item.title ? item.title : item.name }}
         </h2>
-        <ul v-if="!film.title.toLowerCase().includes('undefined')">
-            <li>Titolo Originale: {{ film.original_title }} </li>
-            <li>Lingua Originale: <img :src="flagUrl" :alt="film.original_language"></li>
-            <li>Voto: {{ film.vote_average}} </li>
+        <ul>
+            <li>Titolo Originale: {{ item.original_title ? item.original_title : item.original_name }} </li>
+            <li>Lingua Originale: <img :src="flagUrl" :alt="item.original_language"></li>
+            <li>Voto: {{ item.vote_average ? item.vote_average : item.vote_average }} </li>
         </ul>
-    </div> -->
 
-
-    <div>
-        <h2 v-if="!show.name.toLowerCase().includes('undefined')">
-            {{ show.name }}
-        </h2>
-        <ul v-if="!show.name.toLowerCase().includes('undefined')">
-            <li>Titolo Originale: {{ show.original_name }} </li>
-            <li>Lingua Originale: <img :src="flagUrl" :alt="show.original_language"></li>
-            <li>Voto: {{ show.vote_average}} </li>
-        </ul>
     </div>
-    
+        
   </div>
 </template>
 
@@ -42,18 +29,15 @@ export default {
     },
 
     props: {
-        film: {
+        item: {
             type: Object,
         },
 
-        show: {
-            type: Object,
-        }
     },
 
     methods: {
         getLanguageFlag: function() {
-            axios.get(`${this.flagAPIUrl}${this.show.original_language}`)
+            axios.get(`${this.flagAPIUrl}${this.item.original_language}`)
             .then((result) => {
 
                     this.flagUrl = result.request.responseURL;
@@ -76,8 +60,8 @@ export default {
 
         },
 
-        typeDetector: function() {
-
+        lowerCaseElement: function(element) {
+            return element.toLowerCase();
         }
     },
 
