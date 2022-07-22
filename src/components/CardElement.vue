@@ -14,12 +14,12 @@
                     {{ item.title ? item.title : item.name }}
                 </h2>
                 <ul>
-                    <li>Titolo Originale: {{ item.original_title ? item.original_title : item.original_name }} </li>
+                    <li v-if="(item.title !== item.original_title) || ( item.name !== item.original_name )">Titolo Originale: {{ item.original_title ? item.original_title : item.original_name }} </li>
                     <li>Lingua Originale: <img class="language-flag" :src="flagUrl" :alt="item.original_language"></li>
                     <li>
                         Voto: 
-                        <i class="fa-solid fa-star active-star" v-for="(number, activeStars) in getRatingOutOfFive(item.vote_average)" :key="activeStars"></i>
-                        <i class="fa-solid fa-star" v-for="(number, negativeStars) in 5 - getRatingOutOfFive(item.vote_average)" :key="negativeStars"></i>
+                        <i class="fa-solid fa-star active-star" v-for="(lightStar, activeStars) in getRatingOutOfFive(item.vote_average)" :key="activeStars"></i>
+                        <i class="fa-solid fa-star" v-for="(darkStar, negativeStars) in 5 - getRatingOutOfFive(item.vote_average)" :key="negativeStars"></i>
                     </li>
                 </ul>
 
@@ -70,6 +70,15 @@ export default {
                         break;
                     case 'https://countryflagsapi.com/png/el':
                         this.flagUrl = 'https://countryflagsapi.com/png/sv';
+                        break;
+                    case 'https://countryflagsapi.com/png/ko':
+                        this.flagUrl = 'https://countryflagsapi.com/png/kr';
+                        break;
+                    case 'https://countryflagsapi.com/png/he':
+                        this.flagUrl = 'https://countryflagsapi.com/png/il';
+                        break;
+                    case 'https://countryflagsapi.com/png/ur':
+                        this.flagUrl = 'https://countryflagsapi.com/png/pk';
                         break;
                     default:
                         this.flagUrl = result.request.responseURL;
@@ -149,6 +158,7 @@ export default {
             padding: 1rem;
             backface-visibility: hidden;
             transform: rotateY(180deg);
+            border: 10px solid white;
 
             ul {
                 list-style: none;

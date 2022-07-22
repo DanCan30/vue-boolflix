@@ -2,11 +2,11 @@
     
     <header>
 
-        <h1>netflix</h1>
+        <h1>dd/flix</h1>
 
         <div class="search">
-            <input type="text" v-model.trim="searchInput" @keyup="emitSearchResult()">
-            <i class="fa-solid fa-magnifying-glass" @click="emitSearchResult()"></i>
+            <input type="text" v-model.trim="searchInput" @keyup.enter="emitSearchResult(), emitSearchedValue()">
+            <i class="fa-solid fa-magnifying-glass" @click="emitSearchResult(), emitSearchedValue()"></i>
         </div>
     </header>
 
@@ -18,13 +18,21 @@ export default {
     data: function() {
         return {
             searchInput: "",
+
+            isSearched: false,
         }
     },
 
     methods: {
         emitSearchResult: function() {
-            const result = this.$emit('search', this.searchInput);
+            const result = this.$emit('searchInput', this.searchInput);
+            this.isSearched = true;
             return result;
+        },
+
+        emitSearchedValue: function() {
+            const value = this.$emit('isResearchDone', this.isSearched);
+            return value;
         }
     }
 
@@ -47,7 +55,7 @@ export default {
             position: relative;
 
             &::after {
-                content: "netflix";
+                content: "dd/flix";
                 text-transform: uppercase;
                 position: absolute;
                 top: 8px;
@@ -64,12 +72,12 @@ export default {
             outline: none;
             background-color: transparent;
             border: none;
-            border-bottom: 2px solid white;
+            border-bottom: 2px solid red;
             color: white;
             transition: .4s;
 
             &:focus {
-                border-color: red;
+                border-color: white;
             }
         }
 

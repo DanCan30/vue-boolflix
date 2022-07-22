@@ -1,11 +1,12 @@
 <template>
   <div id="app">
 
-    <Header @search="getShowsList" />
+    <Header @searchInput="getShowsList" @isResearchDone="checkResearch" />
     <Main 
     
       :films="filmsList"
-      :TVSeries="TVSeriesList"/>
+      :TVSeries="TVSeriesList"
+      :researchDone="researchDone"/>
 
   </div>
 </template>
@@ -20,10 +21,19 @@ export default {
 
   data: function() {
     return {
-      apiFilmsUrl: "https://api.themoviedb.org/3/search/movie?api_key=1003857666890380902d6e3595e8622a&language=it-IT&query=",
+      apiKey: "1003857666890380902d6e3595e8622a",
+
+      currentLanguage: "it-IT",
+      
+      apiFilmsUrl: "https://api.themoviedb.org/3/search/movie",
+      
       apiTVSeriesUrl: "https://api.themoviedb.org/3/search/tv?api_key=1003857666890380902d6e3595e8622a&language=it-IT&query=",
+      
       filmsList: [],
+      
       TVSeriesList: [],
+      
+      researchDone: false,
     }
   },
 
@@ -33,19 +43,25 @@ export default {
   },
   methods: {
 
-    getShowsList: function(search) {
+    getShowsList: function(searchResult) {
 
-      axios.get(`${this.apiFilmsUrl}${search}`)
+      axios.get(`${this.apiFilmsUrl}?api_key=${this.apiKey}&language=${this.currentLanguage}&query=${searchResult}`)
+      
       .then((result) => {
-        this.filmsList = result.data.results;
+          this.filmsList = result.data.results;
+          console.log(this.filmsList);
         }
       );
 
-      axios.get(`${this.apiTVSeriesUrl}${search}`)
+      axios.get(`${this.apiTVSeriesUrl}?api_key=${this.apiKey}&language=${this.currentLanguage}&query=${searchResult}`)
       .then((result) => {
         this.TVSeriesList = result.data.results;
         }
       );
+    },
+
+    checkResearch: function(value) {
+      this.researchDone = value;
     }
   },
 
