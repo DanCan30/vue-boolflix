@@ -22,6 +22,16 @@
                         <i class="fa-solid fa-star" v-for="(darkStar, index) in 5 - getRatingOutOfFive(item.vote_average)" :key=" '0' + index"></i>
                     </li>
                     <li>Genere: - <span v-for="(genre, index) in item.genre_ids" :key="index"> {{ getGenresFromID(item.genre_ids[index]) }} - </span></li>
+                    <li>Cast:
+                        <div v-if="item.title">
+                            - <span  v-for="(actor, index) in filmsCast" :key="index"> {{ actor }} -</span>
+                        </div>
+                        <div v-else-if="item.name">
+                            - <span v-for="(actor, index) in TVSeriesCast" :key="index"> {{ actor }} -</span>
+                        </div>
+                        
+                    
+                    </li>
                 </ul>
 
             </div>
@@ -43,6 +53,18 @@ export default {
 
             flagAPIUrl: "https://countryflagsapi.com/png/",
             flagUrl: "",
+
+
+            apiKey: "1003857666890380902d6e3595e8622a",
+
+
+            filmsCastApiUrl: "https://api.themoviedb.org/3/movie/",
+            TVSeriesCastApiUrl: "https://api.themoviedb.org/3/tv/",
+
+            filmsCast: [],
+            TVSeriesCast: [],
+
+
         }
     },
 
@@ -53,7 +75,7 @@ export default {
 
         genres: {
             type: Array,
-        }
+        },
 
     },
 
@@ -121,10 +143,35 @@ export default {
 
         },
 
+        
+        getCastElements: function() {
+
+            
+            axios.get(`${this.TVSeriesCastApiUrl}${this.item.id}/credits?api_key=${this.apiKey}`)
+            .then((result) => {
+
+                for (let i = 0; i < 5; i++) {
+                    this.TVSeriesCast.push(result.data.cast[i].name)
+                }
+                }
+            );
+        
+            axios.get(`${this.filmsCastApiUrl}${this.item.id}/credits?api_key=${this.apiKey}`)
+            .then((result) => {
+
+                for (let i = 0; i < 5; i++) {
+                    this.filmsCast.push(result.data.cast[i].name)
+                }
+                }
+            );  
+            
+        },
+
     },
 
     created() {
         this.getLanguageFlag();
+        this.getCastElements();
     }
 }
 </script>
