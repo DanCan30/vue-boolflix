@@ -21,6 +21,7 @@
                         <i class="fa-solid fa-star active-star" v-for="(lightStar, index) in getRatingOutOfFive(item.vote_average)" :key="index"></i>
                         <i class="fa-solid fa-star" v-for="(darkStar, index) in 5 - getRatingOutOfFive(item.vote_average)" :key=" '0' + index"></i>
                     </li>
+                    <li>Genere: <span v-for="(genre, index) in item.genre_ids" :key="index"> {{ getGenresFromID(item.genre_ids[index]) }} - </span></li>
                 </ul>
 
             </div>
@@ -39,6 +40,7 @@ export default {
 
     data: function() {
         return {
+
             flagAPIUrl: "https://countryflagsapi.com/png/",
             flagUrl: "",
         }
@@ -48,6 +50,10 @@ export default {
         item: {
             type: Object,
         },
+
+        genres: {
+            type: Array,
+        }
 
     },
 
@@ -97,7 +103,21 @@ export default {
             let rating = Math.ceil(value / 2);
             return rating;
 
-        }
+        },
+
+        getGenresFromID: function(genreID) {
+
+            this.genres.forEach((genre) => {
+
+                if(genre.id == genreID) {
+                    console.log(genre.name);
+                    return genre.name;
+                };
+                
+            });
+
+        },
+
     },
 
     created() {

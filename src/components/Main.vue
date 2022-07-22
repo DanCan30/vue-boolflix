@@ -5,13 +5,15 @@
         <h2 class="film-title" v-if="films.length > 2">films</h2>
         <div class="cards-container">
             <CardElement v-for="film in films" :key="film.id"
-            :item="film" />
+            :item="film"
+            :genres="filmsGenre"  />
         </div>
 
         <h2 class="tv-show-title" v-if="TVSeries.length > 0">serie tv</h2>
         <div class="cards-container">
             <CardElement v-for="show in TVSeries" :key="show.id"
-            :item="show" />
+            :item="show"
+            :genres="TVShowsGenre" />
         </div>
 
         <div class="search-message-wrapper">
@@ -22,7 +24,8 @@
         <h2 class="popular-show-title" v-if="popular.length > 0 && !researchDone">gli show del momento</h2>
         <div class="cards-container" v-if="!researchDone">
             <CardElement v-for="popularShow in popular" :key="popularShow.id"
-            :item="popularShow" />
+            :item="popularShow" 
+            :genres="TVShowsGenre"/>
         </div>
 
     </main>
@@ -30,9 +33,26 @@
 
 <script>
 
-import CardElement from "./CardElement.vue"
+import CardElement from "./CardElement.vue";
+import axios from "axios";
 
 export default {
+
+    data: function() {
+        return {
+        
+            filmsGenreUrl: "https://api.themoviedb.org/3/genre/movie/list",
+            TVShowsGenreUrl: "https://api.themoviedb.org/3/genre/tv/list",
+            
+            apiKey: "1003857666890380902d6e3595e8622a",
+
+            currentLanguage: "it-IT",
+
+            filmsGenre: [],
+            TVShowsGenre: [],
+        }
+    },  
+
 
     components: {
         CardElement,
@@ -54,6 +74,27 @@ export default {
         researchDone: {
             type: Boolean,
         }
+    },
+
+    methods: {
+        
+        getGenres: function() {
+            axios.get(`${this.filmsGenreUrl}?api_key=${this.apiKey}&language=${this.currentLanguage}`)
+            .then((result) => {
+                this.filmsGenre = result.data.genres;
+                console.log(this.filmsGenre);
+            })
+
+            axios.get(`${this.TVShowsGenreUrl}?api_key=${this.apiKey}&language=${this.currentLanguage}`)
+            .then((result) => {
+                this.TVShowsGenre = result.data.genres;
+                console.log(this.TVShowsGenre);
+            })
+        }
+    },
+
+    created() {
+        this.getGenres();
     }
 
 }

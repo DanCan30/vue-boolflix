@@ -54,7 +54,6 @@ export default {
 
       .then((result) => {
           this.filmsList = result.data.results;
-          console.log(this.filmsList);
 
         }
       );
@@ -73,7 +72,6 @@ export default {
         }
       );
 
-      console.log(this.mostPopularShows);
     },
 
     checkResearch: function(value) {
