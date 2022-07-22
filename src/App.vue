@@ -6,6 +6,7 @@
     
       :films="filmsList"
       :TVSeries="TVSeriesList"
+      :popular="mostPopularShows"
       :researchDone="researchDone"/>
 
   </div>
@@ -27,11 +28,15 @@ export default {
       
       apiFilmsUrl: "https://api.themoviedb.org/3/search/movie",
       
-      apiTVSeriesUrl: "https://api.themoviedb.org/3/search/tv?api_key=1003857666890380902d6e3595e8622a&language=it-IT&query=",
+      apiTVSeriesUrl: "https://api.themoviedb.org/3/search/tv",
+      
+      apiPopularSeriesUrl: "https://api.themoviedb.org/3/tv/popular",
       
       filmsList: [],
       
       TVSeriesList: [],
+
+      mostPopularShows: [],
       
       researchDone: false,
     }
@@ -46,18 +51,29 @@ export default {
     getShowsList: function(searchResult) {
 
       axios.get(`${this.apiFilmsUrl}?api_key=${this.apiKey}&language=${this.currentLanguage}&query=${searchResult}`)
-      
+
       .then((result) => {
           this.filmsList = result.data.results;
           console.log(this.filmsList);
+
         }
       );
 
       axios.get(`${this.apiTVSeriesUrl}?api_key=${this.apiKey}&language=${this.currentLanguage}&query=${searchResult}`)
+
       .then((result) => {
         this.TVSeriesList = result.data.results;
         }
       );
+
+      axios.get(`${this.apiPopularSeriesUrl}?api_key=${this.apiKey}&language=${this.currentLanguage}`)
+
+      .then((result) => {
+        this.mostPopularShows = result.data.results;
+        }
+      );
+
+      console.log(this.mostPopularShows);
     },
 
     checkResearch: function(value) {

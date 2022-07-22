@@ -18,8 +18,8 @@
                     <li>Lingua Originale: <img class="language-flag" :src="flagUrl" :alt="item.original_language"></li>
                     <li>
                         Voto: 
-                        <i class="fa-solid fa-star active-star" v-for="(lightStar, activeStars) in getRatingOutOfFive(item.vote_average)" :key="activeStars"></i>
-                        <i class="fa-solid fa-star" v-for="(darkStar, negativeStars) in 5 - getRatingOutOfFive(item.vote_average)" :key="negativeStars"></i>
+                        <i class="fa-solid fa-star active-star" v-for="(lightStar, index) in getRatingOutOfFive(item.vote_average)" :key="index"></i>
+                        <i class="fa-solid fa-star" v-for="(darkStar, index) in 5 - getRatingOutOfFive(item.vote_average)" :key=" '0' + index"></i>
                     </li>
                 </ul>
 

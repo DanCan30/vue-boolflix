@@ -2,7 +2,7 @@
     <main>
         <h2 class="error-message" v-if="(films.length === 0) && (TVSeries.length === 0) && (researchDone)">Nessun risultato trovato.</h2>
 
-        <h2 class="film-title" v-if="films.length > 0">films</h2>
+        <h2 class="film-title" v-if="films.length > 2">films</h2>
         <div class="cards-container">
             <CardElement v-for="film in films" :key="film.id"
             :item="film" />
@@ -13,8 +13,16 @@
             <CardElement v-for="show in TVSeries" :key="show.id"
             :item="show" />
         </div>
+
         <div class="search-message-wrapper">
             <h2 class="search-message" v-if="!researchDone">Cerca qualcosa!</h2>
+        </div>
+
+
+        <h2 class="popular-show-title" v-if="popular.length > 0 && !researchDone">gli show del momento</h2>
+        <div class="cards-container" v-if="!researchDone">
+            <CardElement v-for="popularShow in popular" :key="popularShow.id"
+            :item="popularShow" />
         </div>
 
     </main>
@@ -36,6 +44,10 @@ export default {
         },
 
         TVSeries: {
+            type: Array,
+        },
+
+        popular: {
             type: Array,
         },
 
@@ -112,6 +124,10 @@ export default {
         display: flex;
         justify-content: center;
         align-items: center;
+    }
+
+    .popular-show-title {
+        margin-top: 5rem;
     }
 
 
