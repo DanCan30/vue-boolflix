@@ -11,10 +11,10 @@
             <div class="card-back">
 
                 <h2>
-                    {{ item.title ? item.title : item.name }}
+                    {{ valueCheck(item.title, item.name) }}
                 </h2>
                 <ul>
-                    <li v-if="(item.title !== item.original_title) || ( item.name !== item.original_name )">Titolo Originale: {{ item.original_title ? item.original_title : item.original_name }} </li>
+                    <li v-if="(item.title !== item.original_title) || ( item.name !== item.original_name )">Titolo Originale: {{ valueCheck(item.original_title, item.original_name) }} </li>
                     <li>Lingua Originale: <img class="language-flag" :src="flagUrl" :alt="item.original_language"></li>
                     <li>
                         Voto: 
@@ -116,6 +116,11 @@ export default {
                 }
             )
 
+        },
+
+        valueCheck: function(value1, value2) {
+
+            return value1 ? value1 : value2;
         },
 
         lowerCaseElement: function(element) {
