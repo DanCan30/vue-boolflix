@@ -23,7 +23,7 @@
         </div>
 
 
-        <h2 class="popular-show-title" v-if="popular.length > 0 && !researchDone">gli show del momento</h2>
+        <h2 class="popular-show-title" v-if="popular.length > 0 && !researchDone">i titoli del momento</h2>
         <div class="cards-container" v-if="!researchDone">
             <CardElement v-for="popularShow in popular" :key="popularShow.id"
             :item="popularShow" 
@@ -123,7 +123,7 @@ export default {
             margin-top: 1rem;
         }
 
-        &.film-message::after {
+        &.film-title::after {
             content: "films";
             text-transform: uppercase;
             position: absolute;
@@ -133,7 +133,7 @@ export default {
             z-index: -1;
         }
 
-        &.tv-show-message::after {
+        &.tv-show-title::after {
             content: "serie tv";
             text-transform: uppercase;
             position: absolute;
@@ -172,7 +172,7 @@ export default {
     }
 
     .popular-show-title {
-        margin-top: 5rem;
+        margin-top: 4rem;
     }
 
 

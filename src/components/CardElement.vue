@@ -24,10 +24,12 @@
                     <li>Genere: - <span v-for="(genre, index) in item.genre_ids" :key="index"> {{ getGenresFromID(item.genre_ids[index]) }} - </span></li>
                     <li>Cast:
                         <div v-if="item.title">
-                            - <span  v-for="(actor, index) in filmsCast" :key="index"> {{ actor }} -</span>
+                            <span  v-for="(actor, index) in filmsCast.slice(0, -1)" :key="index"> {{ actor }},</span>
+                            <span> {{ " " + filmsCast[filmsCast.length-1] }} </span> 
                         </div>
                         <div v-else-if="item.name">
-                            - <span v-for="(actor, index) in TVSeriesCast" :key="index"> {{ actor }} -</span>
+                            <span v-for="(actor, index) in TVSeriesCast.slice(0, -1)" :key="index"> {{ actor }}, </span>
+                            <span> {{ " " + TVSeriesCast[TVSeriesCast.length-1] }} </span>
                         </div>
                         
                     
