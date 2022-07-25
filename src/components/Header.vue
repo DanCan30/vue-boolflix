@@ -6,8 +6,9 @@
 
         <div class="search-content">
             <label for="genre-filter">Filtra per genere:</label>
-            <select name="genre-filter" id="genre-filter">
-
+            <select name="genre-filter" id="genre-filter" @change="emitGenreFilter()" v-model="genreInput">
+                <option value="all" selected>Tutti</option>
+                <option v-for="(genre, index) in uniqueGenres" :key="index" :value="uniqueGenres[index].id">{{ uniqueGenres[index].name }}</option>
             </select>
             <input type="text" v-model.trim="searchInput" @keyup.enter="emitSearchResult(), emitSearchedValue()">
             <i class="fa-solid fa-magnifying-glass" @click="emitSearchResult(), emitSearchedValue()"></i>
@@ -19,9 +20,17 @@
 <script>
 export default {
 
+    props: {
+        uniqueGenres: {
+            type: Array,
+        },
+    },
+
     data: function() {
         return {
             searchInput: "",
+
+            genreInput: "",
 
             isSearched: false,
         }
@@ -30,6 +39,12 @@ export default {
     methods: {
         emitSearchResult: function() {
             const result = this.$emit('searchInput', this.searchInput);
+            this.isSearched = true;
+            return result;
+        },
+        
+        emitGenreFilter: function() {
+            const result = this.$emit('genreFilter', this.genreInput);
             this.isSearched = true;
             return result;
         },
@@ -67,6 +82,28 @@ export default {
                 color: black;
                 z-index: -1;
 
+            }
+        }
+
+        div.search-content label {
+            font-size: 2rem;
+            text-transform: uppercase;
+            color: white;
+        }
+
+        div.search-content select {
+            margin: 0 3rem 0 1rem;
+            width: 20rem;
+            font-size: 2rem;
+            background-color: transparent;
+            border: none;
+            border-bottom: 2px solid white;
+            color: white;
+            cursor: pointer;
+
+            option {
+                cursor: pointer;
+                background-color: black;
             }
         }
 

@@ -1,11 +1,14 @@
 <template>
   <div id="app">
 
-    <Header @searchInput="getShowsList" @isResearchDone="checkResearch" />
+    <Header @searchInput="getShowsList"
+    @isResearchDone="checkResearch"
+    @genreFilter="genreFilter"
+    :uniqueGenres="uniqueGenres" />
     <Main 
     
-      :films="filmsList"
-      :TVSeries="TVSeriesList"
+      :films="filteredFilmsList"
+      :TVSeries="filteredTVSeriesList"
       :popular="mostPopularShows"
       :researchDone="researchDone"/>
 
@@ -43,6 +46,12 @@ export default {
       mostPopularShows: [],
 
       uniqueGenres: [],
+
+      selectedGenre: "",
+
+      filteredFilmsList: [],
+
+      filteredTVSeriesList: [],
       
       researchDone: false,
     }
@@ -59,8 +68,20 @@ export default {
       axios.get(`${this.apiFilmsUrl}?api_key=${this.apiKey}&language=${this.currentLanguage}&query=${searchResult}`)
 
       .then((result) => {
-          this.filmsList = result.data.results;
+        
+        this.filmsList = result.data.results;
+        
+          if(this.selectedGenre != "all") {
 
+            this.filteredFilmsList = this.filmsList.filter(film =>
+
+              film.genre_ids.includes(this.selectedGenre)
+
+            )
+
+          } else {
+            this.filteredFilmsList = this.filmsList
+          }
         }
       );
 
@@ -68,6 +89,18 @@ export default {
 
       .then((result) => {
         this.TVSeriesList = result.data.results;
+
+         if(this.selectedGenre != "all") {
+
+            this.filteredTVSeriesList = this.TVSeriesList.filter(series =>
+
+              series.genre_ids.includes(this.selectedGenre)
+
+            )
+
+          } else {
+            this.filteredTVSeriesList = this.TVSeriesList
+          }
         }
       );
 
@@ -75,7 +108,6 @@ export default {
 
       .then((result) => {
         this.mostPopularShows = result.data.results;
-        console.log(result.data.results)
         }
       );
 
@@ -86,7 +118,6 @@ export default {
       .then((result) => {
 
         this.uniqueGenres = result.data.genres;
-        console.log(this.uniqueGenres);
         
       });
 
@@ -94,6 +125,12 @@ export default {
 
     checkResearch: function(value) {
       this.researchDone = value;
+    },
+
+    genreFilter: function(genre) {
+
+      this.selectedGenre = genre;
+
     }
   },
 
