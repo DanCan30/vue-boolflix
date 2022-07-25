@@ -31,12 +31,18 @@ export default {
       apiTVSeriesUrl: "https://api.themoviedb.org/3/search/tv",
       
       apiPopularSeriesUrl: "https://api.themoviedb.org/3/tv/popular",
+
+      apiFilmsGenresUrl: "https://api.themoviedb.org/3/genre/movie/list",
+
+      apiTVSeriesGenresUrl: "https://api.themoviedb.org/3/genre/tv/list",
       
       filmsList: [],
       
       TVSeriesList: [],
 
       mostPopularShows: [],
+
+      uniqueGenres: [],
       
       researchDone: false,
     }
@@ -69,8 +75,20 @@ export default {
 
       .then((result) => {
         this.mostPopularShows = result.data.results;
+        console.log(result.data.results)
         }
       );
+
+    },
+
+    getUniqueGenres: function() {
+      axios.get(`${this.apiFilmsGenresUrl}?api_key=${this.apiKey}&language=${this.currentLanguage}`)
+      .then((result) => {
+
+        this.uniqueGenres = result.data.genres;
+        console.log(this.uniqueGenres);
+        
+      });
 
     },
 
@@ -81,6 +99,7 @@ export default {
 
   created() {
     this.getShowsList();
+    this.getUniqueGenres();
   }
 }
 </script>

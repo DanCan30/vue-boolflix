@@ -23,7 +23,7 @@
         </div>
 
 
-        <h2 class="popular-show-title" v-if="popular.length > 0 && !researchDone">i titoli del momento</h2>
+        <h2 class="popular-show-title" v-if="!researchDone">i titoli del momento</h2>
         <div class="cards-container" v-if="!researchDone">
             <CardElement v-for="popularShow in popular" :key="popularShow.id"
             :item="popularShow" 

@@ -4,7 +4,11 @@
 
         <h1>dd/flix</h1>
 
-        <div class="search">
+        <div class="search-content">
+            <label for="genre-filter">Filtra per genere:</label>
+            <select name="genre-filter" id="genre-filter">
+
+            </select>
             <input type="text" v-model.trim="searchInput" @keyup.enter="emitSearchResult(), emitSearchedValue()">
             <i class="fa-solid fa-magnifying-glass" @click="emitSearchResult(), emitSearchedValue()"></i>
         </div>
@@ -66,7 +70,7 @@ export default {
             }
         }
 
-        div.search input {
+        div.search-content input {
             font-size: 2rem;
             margin: 0 1rem;
             outline: none;
@@ -82,7 +86,7 @@ export default {
         }
 
 
-        div.search i {
+        div.search-content i {
             color: white;
             display: inline-block;
             margin-right: 2rem;

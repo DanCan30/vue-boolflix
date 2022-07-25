@@ -1,11 +1,11 @@
 <template>
   <div>
-    <div class="card" v-if="item.title ? (!item.title.toLowerCase().includes('undefined')) : (!item.name.toLowerCase().includes('undefined')) ">
+    <div class="card" v-if="(!valueCheck(item.title, item.name).toLowerCase().includes('undefined'))" >
 
         <div class="card-flipper">
 
             <div class="card-front">
-                <img class="poster" :src="(item.poster_path == null ) ? require('../assets/img/Poster-not-found.jpg') : `https://image.tmdb.org/t/p/w342${item.poster_path}` " :alt="`${ item.title ? item.title : item.name }'s poster`">
+                <img class="poster" :src="(item.poster_path == null ) ? require('../assets/img/Poster-not-found.jpg') : `https://image.tmdb.org/t/p/w342${item.poster_path}` " :alt="`${ valueCheck(item.title, item.name) }'s poster`">
             </div>
 
             <div class="card-back">
@@ -21,21 +21,20 @@
                         <i class="fa-solid fa-star active-star" v-for="(lightStar, index) in getRatingOutOfFive(item.vote_average)" :key="index"></i>
                         <i class="fa-solid fa-star" v-for="(darkStar, index) in 5 - getRatingOutOfFive(item.vote_average)" :key=" '0' + index"></i>
                     </li>
-                    <li>Genere: - <span v-for="(genre, index) in item.genre_ids" :key="index"> {{ getGenresFromID(item.genre_ids[index]) }} - </span></li>
+                    <li v-if="item.genre_ids.length != 0">Genere: - <span v-for="(genre, index) in item.genre_ids" :key="index"> {{ getGenresFromID(item.genre_ids[index]) }} - </span></li>
+                    <li v-else >Genere: - {{ undefinedElement }} -</li>
                     <li>Cast:
                         <div v-if="item.title">
-                            <span v-if="filmsCast.length == 0"> {{ undefinedCast }} </span>
-                            <div v-else>
-                                <span  v-for="(actor, index) in filmsCast.slice(0, -1)" :key="index"> {{ actor }},</span>
-                                <span> {{ " " + filmsCast[filmsCast.length-1] }} </span> 
-                            </div>
+
+                            <span  v-for="(actor, index) in filmsCast.slice(0, -1)" :key="index"> {{ actor }},</span>
+                            <span> {{ " " + filmsCast[filmsCast.length-1] }} </span> 
+
                         </div>
                         <div v-else-if="item.name">
-                            <span v-if="TVSeriesCast.length == 0"> {{ undefinedCast }} </span>
-                            <div v-else>
-                                <span v-for="(actor, index) in TVSeriesCast.slice(0, -1)" :key="index"> {{ actor }}, </span>
-                                <span> {{ " " + TVSeriesCast[TVSeriesCast.length - 1] }} </span> 
-                            </div>
+
+                            <span v-for="(actor, index) in TVSeriesCast.slice(0, -1)" :key="index"> {{ actor }}, </span>
+                            <span> {{ " " + TVSeriesCast[TVSeriesCast.length - 1] }} </span> 
+
                         </div>
                         
                     
@@ -73,7 +72,7 @@ export default {
             filmsCast: [],
             TVSeriesCast: [],
 
-            undefinedCast: "N/A"
+            undefinedElement: "N/A",
 
 
         }
@@ -97,14 +96,9 @@ export default {
             return value1 ? value1 : value2;
         },
 
-        lowerCaseElement: function(element) {
-            return element.toLowerCase();
-        },
-
         getRatingOutOfFive: function(value) {
 
-            let rating = Math.ceil(value / 2);
-            return rating;
+            return Math.ceil(value / 2);
 
         },
 
@@ -131,31 +125,62 @@ export default {
             axios.get(`${this.TVSeriesCastApiUrl}${this.item.id}/credits?api_key=${this.apiKey}`)
             .then((result) => {
 
-                for (let i = 0; i < 5; i++) {
-                    this.TVSeriesCast.push(result.data.cast[i].name)
+                let castNumber = result.data.cast.length;
+                
+                if(castNumber > 5) {
+                    castNumber = 5;
                 };
+                
+                if(castNumber != 0) {
 
-                if(this.TVSeriesCast.length < 1) {
-                    TVSeriesCast.push(this.undefinedCast);
+                    for (let i = 0; i < castNumber; i++) {
+                        this.TVSeriesCast.push(result.data.cast[i].name)
+                    };
+                    
+                } else {
+                    this.TVSeriesCast.push(this.undefinedElement);
+
                 }
 
+            },
+            ) .catch((error) => {
+                
+                if(error.response.status === 404) {
+                    console.warn("Elemento non trovato");
                 }
-            );
+               
+            });
         
             axios.get(`${this.filmsCastApiUrl}${this.item.id}/credits?api_key=${this.apiKey}`)
             .then((result) => {
 
-                for (let i = 0; i < 5; i++) {
-                    this.filmsCast.push(result.data.cast[i].name)
+                let castNumber = result.data.cast.length;
+
+                if(castNumber > 5) {
+                    castNumber = 5;
                 };
+
+                if(castNumber != 0) {
+
+                    for (let i = 0; i < castNumber; i++) {
+                        this.filmsCast.push(result.data.cast[i].name)
+                    };
                 
-                if(this.filmsCast.length == undefined) {
-                    filmsCast.push(this.undefinedCast);
+                } else {
+                    this.filmsCast.push(this.undefinedElement);
+
                 }
 
                 },
                 
-            );  
+            ) .catch((error) => {
+                
+                if(error.response.status === 404) {
+                    console.warn("Elemento non trovato");
+                }
+               
+            });
+            
             
         },
 
