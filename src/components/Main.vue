@@ -22,7 +22,6 @@
             <h2 class="search-message" v-if="!researchDone">Cerca qualcosa!</h2>
         </div>
 
-
         <h2 class="popular-show-title" v-if="!researchDone">i titoli del momento</h2>
         <div class="cards-container" v-if="!researchDone">
             <CardElement v-for="popularShow in popular" :key="popularShow.id"
@@ -56,7 +55,6 @@ export default {
 
         }
     },  
-
 
     components: {
         CardElement,

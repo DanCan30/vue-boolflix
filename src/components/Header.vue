@@ -7,7 +7,7 @@
         <div class="search-content">
             <label for="genre-filter">Filtra per genere:</label>
             <select name="genre-filter" id="genre-filter" @change="emitGenreFilter()" v-model="genreInput">
-                <option value="all" selected>Tutti</option>
+                <option value="all">Tutti</option>
                 <option v-for="(genre, index) in uniqueGenres" :key="index" :value="uniqueGenres[index].id">{{ uniqueGenres[index].name }}</option>
             </select>
             <input type="text" v-model.trim="searchInput" @keyup.enter="emitSearchResult(), emitSearchedValue()">
@@ -30,7 +30,7 @@ export default {
         return {
             searchInput: "",
 
-            genreInput: "",
+            genreInput: "all",
 
             isSearched: false,
         }
@@ -97,9 +97,13 @@ export default {
             font-size: 2rem;
             background-color: transparent;
             border: none;
-            border-bottom: 2px solid white;
+            border-bottom: 2px solid red;
             color: white;
             cursor: pointer;
+
+            &:focus {
+                border: none;
+            }
 
             option {
                 cursor: pointer;

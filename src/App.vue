@@ -47,7 +47,7 @@ export default {
 
       uniqueGenres: [],
 
-      selectedGenre: "",
+      selectedGenre: "all",
 
       filteredFilmsList: [],
 
@@ -70,17 +70,19 @@ export default {
       .then((result) => {
         
         this.filmsList = result.data.results;
-        
-          if(this.selectedGenre != "all") {
+
+          if(this.selectedGenre === "all") {
+
+            this.filteredFilmsList = this.filmsList
+
+
+          } else {
 
             this.filteredFilmsList = this.filmsList.filter(film =>
 
               film.genre_ids.includes(this.selectedGenre)
 
             )
-
-          } else {
-            this.filteredFilmsList = this.filmsList
           }
         }
       );
@@ -90,16 +92,16 @@ export default {
       .then((result) => {
         this.TVSeriesList = result.data.results;
 
-         if(this.selectedGenre != "all") {
+         if(this.selectedGenre === "all") {
 
+          this.filteredTVSeriesList = this.TVSeriesList;
+
+          } else {
             this.filteredTVSeriesList = this.TVSeriesList.filter(series =>
 
               series.genre_ids.includes(this.selectedGenre)
 
             )
-
-          } else {
-            this.filteredTVSeriesList = this.TVSeriesList
           }
         }
       );
