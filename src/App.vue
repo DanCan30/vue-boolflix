@@ -115,16 +115,6 @@ export default {
 
     },
 
-    getUniqueGenres: function() {
-      axios.get(`${this.apiFilmsGenresUrl}?api_key=${this.apiKey}&language=${this.currentLanguage}`)
-      .then((result) => {
-
-        this.uniqueGenres = result.data.genres;
-        
-      });
-
-    },
-
     checkResearch: function(value) {
       this.researchDone = value;
     },
@@ -136,9 +126,22 @@ export default {
     }
   },
 
+  computed: {
+    
+    getUniqueGenres: function() {
+      axios.get(`${this.apiFilmsGenresUrl}?api_key=${this.apiKey}&language=${this.currentLanguage}`)
+      .then((result) => {
+
+        this.uniqueGenres = result.data.genres;
+        
+      });
+
+    },
+  },
+
   created() {
     this.getShowsList();
-    this.getUniqueGenres();
+    this.getUniqueGenres;
   }
 }
 </script>

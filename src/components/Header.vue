@@ -37,6 +37,7 @@ export default {
     },
 
     methods: {
+
         emitSearchResult: function() {
             const result = this.$emit('searchInput', this.searchInput);
             this.isSearched = true;
