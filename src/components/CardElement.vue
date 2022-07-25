@@ -15,7 +15,7 @@
                 </h2>
                 <ul>
                     <li v-if="(item.title !== item.original_title) || ( item.name !== item.original_name )">Titolo Originale: {{ valueCheck(item.original_title, item.original_name) }} </li>
-                    <li>Lingua Originale: <img class="language-flag" :src="flagUrl" :alt="item.original_language"></li>
+                    <li>Lingua Originale: <lang-flag :iso="item.original_language" /></li>
                     <li>
                         Voto: 
                         <i class="fa-solid fa-star active-star" v-for="(lightStar, index) in getRatingOutOfFive(item.vote_average)" :key="index"></i>
@@ -24,12 +24,18 @@
                     <li>Genere: - <span v-for="(genre, index) in item.genre_ids" :key="index"> {{ getGenresFromID(item.genre_ids[index]) }} - </span></li>
                     <li>Cast:
                         <div v-if="item.title">
-                            <span  v-for="(actor, index) in filmsCast.slice(0, -1)" :key="index"> {{ actor }},</span>
-                            <span> {{ " " + filmsCast[filmsCast.length-1] }} </span> 
+                            <span v-if="filmsCast.length == 0"> {{ undefinedCast }} </span>
+                            <div v-else>
+                                <span  v-for="(actor, index) in filmsCast.slice(0, -1)" :key="index"> {{ actor }},</span>
+                                <span> {{ " " + filmsCast[filmsCast.length-1] }} </span> 
+                            </div>
                         </div>
                         <div v-else-if="item.name">
-                            <span v-for="(actor, index) in TVSeriesCast.slice(0, -1)" :key="index"> {{ actor }}, </span>
-                            <span> {{ " " + TVSeriesCast[TVSeriesCast.length-1] }} </span>
+                            <span v-if="TVSeriesCast.length == 0"> {{ undefinedCast }} </span>
+                            <div v-else>
+                                <span v-for="(actor, index) in TVSeriesCast.slice(0, -1)" :key="index"> {{ actor }}, </span>
+                                <span> {{ " " + TVSeriesCast[TVSeriesCast.length - 1] }} </span> 
+                            </div>
                         </div>
                         
                     
@@ -47,15 +53,16 @@
 <script>
 
 import axios from "axios";
+import LangFlag from 'vue-lang-code-flags';
 
 export default {
 
+    components: {
+        LangFlag,
+    },
+
     data: function() {
         return {
-
-            flagAPIUrl: "https://countryflagsapi.com/png/",
-            flagUrl: "",
-
 
             apiKey: "1003857666890380902d6e3595e8622a",
 
@@ -65,6 +72,8 @@ export default {
 
             filmsCast: [],
             TVSeriesCast: [],
+
+            undefinedCast: "N/A"
 
 
         }
@@ -82,42 +91,7 @@ export default {
     },
 
     methods: {
-        getLanguageFlag: function() {
-            axios.get(`${this.flagAPIUrl}${this.item.original_language}`)
-            .then((result) => {
-
-                    this.flagUrl = result.request.responseURL;
-
-                    switch(this.flagUrl) {
-                    case 'https://countryflagsapi.com/png/en':
-                        this.flagUrl = 'https://countryflagsapi.com/png/gb';
-                        break;
-                    case 'https://countryflagsapi.com/png/zh':
-                        this.flagUrl = 'https://countryflagsapi.com/png/cn';
-                        break;
-                    case 'https://countryflagsapi.com/png/ja':
-                        this.flagUrl = 'https://countryflagsapi.com/png/jp';
-                        break;
-                    case 'https://countryflagsapi.com/png/el':
-                        this.flagUrl = 'https://countryflagsapi.com/png/sv';
-                        break;
-                    case 'https://countryflagsapi.com/png/ko':
-                        this.flagUrl = 'https://countryflagsapi.com/png/kr';
-                        break;
-                    case 'https://countryflagsapi.com/png/he':
-                        this.flagUrl = 'https://countryflagsapi.com/png/il';
-                        break;
-                    case 'https://countryflagsapi.com/png/ur':
-                        this.flagUrl = 'https://countryflagsapi.com/png/pk';
-                        break;
-                    default:
-                        this.flagUrl = result.request.responseURL;
-                    }
-                }
-            )
-
-        },
-
+        
         valueCheck: function(value1, value2) {
 
             return value1 ? value1 : value2;
@@ -159,7 +133,12 @@ export default {
 
                 for (let i = 0; i < 5; i++) {
                     this.TVSeriesCast.push(result.data.cast[i].name)
+                };
+
+                if(this.TVSeriesCast.length < 1) {
+                    TVSeriesCast.push(this.undefinedCast);
                 }
+
                 }
             );
         
@@ -168,8 +147,14 @@ export default {
 
                 for (let i = 0; i < 5; i++) {
                     this.filmsCast.push(result.data.cast[i].name)
+                };
+                
+                if(this.filmsCast.length == undefined) {
+                    filmsCast.push(this.undefinedCast);
                 }
-                }
+
+                },
+                
             );  
             
         },
@@ -177,7 +162,6 @@ export default {
     },
 
     created() {
-        this.getLanguageFlag();
         this.getCastElements();
     }
 }
@@ -241,11 +225,6 @@ export default {
                 list-style: none;
             }
 
-        }
-
-
-        img.language-flag {
-            width: 32px;
         }
 
         .active-star {
