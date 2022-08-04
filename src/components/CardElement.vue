@@ -146,7 +146,7 @@ export default {
             ) .catch((error) => {
                 
                 if(error.response.status === 404) {
-                    console.warn("Elemento non trovato");
+                    console.warn("Cast element is missing");
                 }
                
             });

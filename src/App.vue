@@ -35,10 +35,8 @@ export default {
       
       apiPopularSeriesUrl: "https://api.themoviedb.org/3/tv/popular",
 
-      apiFilmsGenresUrl: "https://api.themoviedb.org/3/genre/movie/list",
+      apiGenresUrl: "https://api.themoviedb.org/3/genre/movie/list",
 
-      apiTVSeriesGenresUrl: "https://api.themoviedb.org/3/genre/tv/list",
-      
       filmsList: [],
       
       TVSeriesList: [],
@@ -65,53 +63,41 @@ export default {
 
     getShowsList: function(searchResult) {
 
-      axios.get(`${this.apiFilmsUrl}?api_key=${this.apiKey}&language=${this.currentLanguage}&query=${searchResult}`)
+        // Get Urls for axios requests based on the user research
+      const filmsUrl = axios.get(`${this.apiFilmsUrl}?api_key=${this.apiKey}&language=${this.currentLanguage}&query=${searchResult}`);
+      const TVSeriesUrl = axios.get(this.apiTVSeriesUrl + "?api_key=" + this.apiKey + "&language=" + this.currentLanguage + "&query=" + searchResult);
+      const popularUrl = axios.get(this.apiPopularSeriesUrl + "?api_key=" + this.apiKey + "&language=" + this.currentLanguage);
 
-      .then((result) => {
-        
-        this.filmsList = result.data.results;
+        // Use a single axios request for all the requests
+      axios.all([filmsUrl, TVSeriesUrl, popularUrl]).then(axios.spread((...responses) =>
+      {
+          // Spread the responses in different arrays
+        const films = responses[0].data.results;
+        const TVSeries = responses[1].data.results;
+        const popular = responses[2].data.results;
 
-          if(this.selectedGenre === "all") {
+        this.filmsList = films;
+        this.TVSeriesList = TVSeries;
+        this.mostPopularShows = popular;
 
-            this.filteredFilmsList = this.filmsList
+          // If the genre filter is setted on "all" the filtered lists are equal to the normal lists
+        if(this.selectedGenre === "all") {
 
-
-          } else {
-
-            this.filteredFilmsList = this.filmsList.filter(film =>
-
-              film.genre_ids.includes(this.selectedGenre)
-
-            )
-          }
-        }
-      );
-
-      axios.get(`${this.apiTVSeriesUrl}?api_key=${this.apiKey}&language=${this.currentLanguage}&query=${searchResult}`)
-
-      .then((result) => {
-        this.TVSeriesList = result.data.results;
-
-         if(this.selectedGenre === "all") {
-
+          this.filteredFilmsList = this.filmsList;
           this.filteredTVSeriesList = this.TVSeriesList;
 
-          } else {
-            this.filteredTVSeriesList = this.TVSeriesList.filter(series =>
+        } else {
 
-              series.genre_ids.includes(this.selectedGenre)
+            // Else filter the array by the selected genre
+          this.filteredFilmsList = this.filmsList.filter(film =>
+            film.genre_ids.includes(this.selectedGenre)
+          );
 
-            )
-          }
+          this.filteredTVSeriesList = this.TVSeriesList.filter(show =>
+            show.genre_ids.includes(this.selectedGenre)
+          );
         }
-      );
-
-      axios.get(`${this.apiPopularSeriesUrl}?api_key=${this.apiKey}&language=${this.currentLanguage}`)
-
-      .then((result) => {
-        this.mostPopularShows = result.data.results;
-        }
-      );
+      }));
 
     },
 
@@ -129,7 +115,7 @@ export default {
   computed: {
     
     getUniqueGenres: function() {
-      axios.get(`${this.apiFilmsGenresUrl}?api_key=${this.apiKey}&language=${this.currentLanguage}`)
+      axios.get(`${this.apiGenresUrl}?api_key=${this.apiKey}&language=${this.currentLanguage}`)
       .then((result) => {
 
         this.uniqueGenres = result.data.genres;
