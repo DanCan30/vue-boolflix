@@ -119,10 +119,10 @@ export default {
         },
 
         
-        getCastElements: function() {
+        getCastElements: function(url, array) {
 
             
-            axios.get(`${this.TVSeriesCastApiUrl}${this.item.id}/credits?api_key=${this.apiKey}`)
+            axios.get(url + this.item.id + "/credits?api_key=" + this.apiKey)
             .then((result) => {
 
                 let castNumber = result.data.cast.length;
@@ -134,11 +134,11 @@ export default {
                 if(castNumber != 0) {
 
                     for (let i = 0; i < castNumber; i++) {
-                        this.TVSeriesCast.push(result.data.cast[i].name)
+                        array.push(result.data.cast[i].name)
                     };
                     
                 } else {
-                    this.TVSeriesCast.push(this.undefinedElement);
+                    array.push(this.undefinedElement);
 
                 }
 
@@ -150,44 +150,13 @@ export default {
                 }
                
             });
-        
-            axios.get(`${this.filmsCastApiUrl}${this.item.id}/credits?api_key=${this.apiKey}`)
-            .then((result) => {
-
-                let castNumber = result.data.cast.length;
-
-                if(castNumber > 5) {
-                    castNumber = 5;
-                };
-
-                if(castNumber != 0) {
-
-                    for (let i = 0; i < castNumber; i++) {
-                        this.filmsCast.push(result.data.cast[i].name)
-                    };
-                
-                } else {
-                    this.filmsCast.push(this.undefinedElement);
-
-                }
-
-                },
-                
-            ) .catch((error) => {
-                
-                if(error.response.status === 404) {
-                    console.warn("Elemento non trovato");
-                }
-               
-            });
-            
-            
         },
 
     },
 
     created() {
-        this.getCastElements();
+        this.getCastElements(this.TVSeriesCastApiUrl, this.TVSeriesCast);
+        this.getCastElements(this.filmsCastApiUrl, this.filmsCast);
     }
 }
 </script>

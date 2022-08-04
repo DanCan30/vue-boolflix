@@ -64,7 +64,7 @@ export default {
     getShowsList: function(searchResult) {
 
         // Get Urls for axios requests based on the user research
-      const filmsUrl = axios.get(`${this.apiFilmsUrl}?api_key=${this.apiKey}&language=${this.currentLanguage}&query=${searchResult}`);
+      const filmsUrl = axios.get(this.apiFilmsUrl + "?api_key=" + this.apiKey + "&language=" + this.currentLanguage + "&query=" + searchResult);
       const TVSeriesUrl = axios.get(this.apiTVSeriesUrl + "?api_key=" + this.apiKey + "&language=" + this.currentLanguage + "&query=" + searchResult);
       const popularUrl = axios.get(this.apiPopularSeriesUrl + "?api_key=" + this.apiKey + "&language=" + this.currentLanguage);
 
